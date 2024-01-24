@@ -1,0 +1,790 @@
+<html>
+
+<head>
+    <title>Online Shopping Store</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <style>
+
+            .currentTime {
+                margin-top: 10px;
+                margin-bottom: 10px;
+                border: solid 2px black;
+                width: 20%;
+                border-radius: 5%;
+            }
+
+            .reviewItem {
+                border: solid 2px black;
+                border-radius: 5%;
+                width: 30%;
+                margin-left: 20px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                padding: 10px 15px;
+            }
+
+            .ReviewId {
+                margin: 5px 5px;
+            }
+
+            .OgReview {
+                margin: 5px 5px;
+            }
+
+            .ratings {
+                margin: 5px 5px;
+            }
+            span {
+                cursor: pointer;
+            }
+            #productList td {
+                font-size: 14px;
+                align-items: center;
+            }
+            .btn-sm {
+                font-size: 12px;
+            }
+            .img-thumbnail {
+                width: 60px;
+                object-fit: cover;
+            }
+            .pdt {
+                position: absolute;
+                z-index: 9999;
+                height: 90%;
+                overflow: auto;
+                width: 55%;
+                right: 0;
+                box-shadow: 0 3px 6px rgb(0 0 0 / 16%), 0 1px 2px rgb(0 0 0 / 23%);
+                border-top-left-radius: 15px;
+                border-bottom-left-radius: 15px;
+                display: none;
+            }
+            .cart {
+                position: absolute;
+                z-index: 9999;
+                height: 90%;
+                overflow: auto;
+                width: 55%;
+                left: 0;
+                box-shadow: 0 3px 6px rgb(0 0 0 / 16%), 0 1px 2px rgb(0 0 0 / 23%);
+                border-top-right-radius: 15px;
+                border-bottom-right-radius: 15px;
+                display: none;
+            }
+        </style>
+</head>
+
+<body>
+
+    <div id="currentTime" class="currentTime">
+    </div>
+
+    <label for="currency" id="currency">Choose Your currency:</label>
+        <select name="currency" id="currency">
+            <option value="CAD" id="CAD">CAD</option>
+            <option value="INR" id="INR">INR</option>
+        </select>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light"
+        style="box-shadow: 0 3px 6px rgb(0 0 0 / 16%), 0 1px 2px rgb(0 0 0 / 23%);">
+        <a class="navbar-brand" href="#">Online Shopping Store</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        </div>
+    </nav>
+
+
+        <div class="card pdt" id="p-detail">
+        </div>
+
+        <div class="card cart" id="cart-detail">
+        </div>
+
+    <div class="container-fluid mt-4">
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Products</span>
+            </div>
+            <div class="card-body" style="max-height: 400px; overflow: auto">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th style="font-size: 14px;" scope="col">ID</th>
+                            <th style="font-size: 14px;" scope="col">Product Name</th>
+                            <th style="font-size: 14px;" scope="col">Price</th>
+                            <th style="font-size: 14px;" scope="col">Quantity On Hand</th>
+                            <th style="font-size: 14px;" scope="col">Category</th>
+                            <th style="font-size: 14px;" scope="col">Image</th>
+                            <th style="font-size: 14px;" scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="productList">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <fieldset>
+        <div class="reviewItem"><h2>Review  Item</h2>
+        <div>Product ID: 
+            <input type="text" id="ReviewId" class="ReviewId" />
+        </div>
+        <div>Review: 
+            <input type="text" id="OgReview"  class="OgReview"/></div>
+        <div>Rating(Out of 5): 
+            <input type="number" id="ratings" max="5" min="0" class="ratings" />
+        </div>
+        <div><input type="button" value="Review" /></div>
+        </div>
+    </fieldset>
+
+</body>
+
+<script>
+
+    //writing a time first
+
+    var time = new Date();
+    document.getElementById('currentTime').innerHTML = time;
+
+        //Empty array to store cart objects
+        var cartArray = [];
+
+        //productArray that stores every product information
+        var productArray = 
+        [  
+            {
+                "id": 1,
+                "name": "HP Pavilion 15-DK1056WM",
+                "description": "HP Pavilion 15-DK1056WM Gaming Laptop 10th Gen Core i5, 8GB, 256GB SSD, GTX 1650 4GB, Windows 10",
+                "price": 1099,
+                "INRprice": 1099*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 6.18,
+                "rating": 4.43,
+                "stock": 89,
+                "brand": "HP Pavilion",
+                "category": "laptops",
+                "image": "https://i.dummyjson.com/data/products/10/thumbnail.jpeg",
+            },
+            {
+                "id": 11,
+                "name": "perfume Oil",
+                "description": "Mega Discount, Impression of Acqua Di Gio by GiorgioArmani concentrated attar perfume Oil",
+                "price": 13,
+                "INRprice": 13*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 8.4,
+                "rating": 4.26,
+                "stock": 65,
+                "brand": "Impression of Acqua Di Gio",
+                "category": "fragrances",
+                "image": "https://i.dummyjson.com/data/products/11/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/11/1.jpg",
+                    "https://i.dummyjson.com/data/products/11/2.jpg",
+                    "https://i.dummyjson.com/data/products/11/3.jpg",
+                    "https://i.dummyjson.com/data/products/11/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 12,
+                "name": "Brown Perfume",
+                "description": "Royal_Mirage Sport Brown Perfume for Men & Women - 120ml",
+                "price": 40,
+                "INRprice": 40*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 15.66,
+                "rating": 4,
+                "stock": 52,
+                "brand": "Royal_Mirage",
+                "category": "fragrances",
+                "image": "https://i.dummyjson.com/data/products/12/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/12/1.jpg",
+                    "https://i.dummyjson.com/data/products/12/2.jpg",
+                    "https://i.dummyjson.com/data/products/12/3.png",
+                    "https://i.dummyjson.com/data/products/12/4.jpg",
+                    "https://i.dummyjson.com/data/products/12/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 13,
+                "name": "Fog Scent Xpressio Perfume",
+                "description": "Product details of Best Fog Scent Xpressio Perfume 100ml For Men cool long lasting perfumes for Men",
+                "price": 13,
+                "INRprice": 13*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 8.14,
+                "rating": 4.59,
+                "stock": 61,
+                "brand": "Fog Scent Xpressio",
+                "category": "fragrances",
+                "image": "https://i.dummyjson.com/data/products/13/thumbnail.webp",
+                "images": [
+                    "https://i.dummyjson.com/data/products/13/1.jpg",
+                    "https://i.dummyjson.com/data/products/13/2.png",
+                    "https://i.dummyjson.com/data/products/13/3.jpg",
+                    "https://i.dummyjson.com/data/products/13/4.jpg",
+                    "https://i.dummyjson.com/data/products/13/thumbnail.webp"
+                ]
+            },
+            {
+                "id": 14,
+                "name": "Non-Alcoholic Concentrated Perfume Oil",
+                "description": "Original Al Munakh® by Mahal Al Musk | Our Impression of Climate | 6ml Non-Alcoholic Concentrated Perfume Oil",
+                "price": 120,
+                "INRprice": 120*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 15.6,
+                "rating": 4.21,
+                "stock": 114,
+                "brand": "Al Munakh",
+                "category": "fragrances",
+                "image": "https://i.dummyjson.com/data/products/14/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/14/1.jpg",
+                    "https://i.dummyjson.com/data/products/14/2.jpg",
+                    "https://i.dummyjson.com/data/products/14/3.jpg",
+                    "https://i.dummyjson.com/data/products/14/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 15,
+                "name": "Eau De Perfume Spray",
+                "description": "Genuine Al-Rehab spray perfume from UAE/Saudi Arabia/Yemen High Quality",
+                "price": 30,
+                "INRprice": 30*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 10.99,
+                "rating": 4.7,
+                "stock": 105,
+                "brand": "Lord - Al-Rehab",
+                "category": "fragrances",
+                "image": "https://i.dummyjson.com/data/products/15/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/15/1.jpg",
+                    "https://i.dummyjson.com/data/products/15/2.jpg",
+                    "https://i.dummyjson.com/data/products/15/3.jpg",
+                    "https://i.dummyjson.com/data/products/15/4.jpg",
+                    "https://i.dummyjson.com/data/products/15/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 16,
+                "name": "Hyaluronic Acid Serum",
+                "description": "L'OrÃ©al Paris introduces Hyaluron Expert Replumping Serum formulated with 1.5% Hyaluronic Acid",
+                "price": 19,
+                "INRprice": 19*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 13.31,
+                "rating": 4.83,
+                "stock": 110,
+                "brand": "L'Oreal Paris",
+                "category": "skincare",
+                "image": "https://i.dummyjson.com/data/products/16/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/16/1.png",
+                    "https://i.dummyjson.com/data/products/16/2.webp",
+                    "https://i.dummyjson.com/data/products/16/3.jpg",
+                    "https://i.dummyjson.com/data/products/16/4.jpg",
+                    "https://i.dummyjson.com/data/products/16/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 17,
+                "name": "Tree Oil 30ml",
+                "description": "Tea tree oil contains a number of compounds, including terpinen-4-ol, that have been shown to kill certain bacteria,",
+                "price": 12,
+                "INRprice": 12*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 4.09,
+                "rating": 4.52,
+                "stock": 78,
+                "brand": "Hemani Tea",
+                "category": "skincare",
+                "image": "https://i.dummyjson.com/data/products/17/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/17/1.jpg",
+                    "https://i.dummyjson.com/data/products/17/2.jpg",
+                    "https://i.dummyjson.com/data/products/17/3.jpg",
+                    "https://i.dummyjson.com/data/products/17/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 18,
+                "name": "Oil Free Moisturizer 100ml",
+                "description": "Dermive Oil Free Moisturizer with SPF 20 is specifically formulated with ceramides, hyaluronic acid & sunscreen.",
+                "price": 40,
+                "INRprice": 40*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 13.1,
+                "rating": 4.56,
+                "stock": 88,
+                "brand": "Dermive",
+                "category": "skincare",
+                "image": "https://i.dummyjson.com/data/products/18/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/18/1.jpg",
+                    "https://i.dummyjson.com/data/products/18/2.jpg",
+                    "https://i.dummyjson.com/data/products/18/3.jpg",
+                    "https://i.dummyjson.com/data/products/18/4.jpg",
+                    "https://i.dummyjson.com/data/products/18/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 19,
+                "name": "Skin Beauty Serum.",
+                "description": "Product name: rorec collagen hyaluronic acid white face serum riceNet weight: 15 m",
+                "price": 46,
+                "INRprice": 46*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 10.68,
+                "rating": 4.42,
+                "stock": 54,
+                "brand": "ROREC White Rice",
+                "category": "skincare",
+                "image": "https://i.dummyjson.com/data/products/19/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/19/1.jpg",
+                    "https://i.dummyjson.com/data/products/19/2.jpg",
+                    "https://i.dummyjson.com/data/products/19/3.png",
+                    "https://i.dummyjson.com/data/products/19/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 20,
+                "name": "Freckle Treatment Cream- 15gm",
+                "description": "Fair & Clear is Pakistan's only pure Freckle cream which helpsfade Freckles, Darkspots and pigments. Mercury level is 0%, so there are no side effects.",
+                "price": 70,
+                "INRprice": 70*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 16.99,
+                "rating": 4.06,
+                "stock": 140,
+                "brand": "Fair & Clear",
+                "category": "skincare",
+                "image": "https://i.dummyjson.com/data/products/20/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/20/1.jpg",
+                    "https://i.dummyjson.com/data/products/20/2.jpg",
+                    "https://i.dummyjson.com/data/products/20/3.jpg",
+                    "https://i.dummyjson.com/data/products/20/4.jpg",
+                    "https://i.dummyjson.com/data/products/20/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 21,
+                "name": "- Daal Masoor 500 grams",
+                "description": "Fine quality Branded Product Keep in a cool and dry place",
+                "price": 20,
+                "INRprice": 20*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 4.81,
+                "rating": 4.44,
+                "stock": 133,
+                "brand": "Saaf & Khaas",
+                "category": "groceries",
+                "image": "https://i.dummyjson.com/data/products/21/thumbnail.png",
+                "images": [
+                    "https://i.dummyjson.com/data/products/21/1.png",
+                    "https://i.dummyjson.com/data/products/21/2.jpg",
+                    "https://i.dummyjson.com/data/products/21/3.jpg"  
+                ]
+            },
+            {
+                "id": 22,
+                "name": "Elbow Macaroni - 400 gm",
+                "description": "Product details of Bake Parlor Big Elbow Macaroni - 400 gm",
+                "price": 14,
+                "INRprice": 14*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 15.58,
+                "rating": 4.57,
+                "stock": 146,
+                "brand": "Bake Parlor Big",
+                "category": "groceries",
+                "image": "https://i.dummyjson.com/data/products/22/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/22/1.jpg",
+                    "https://i.dummyjson.com/data/products/22/2.jpg",
+                    "https://i.dummyjson.com/data/products/22/3.jpg"
+                ]
+            },
+            {
+                "id": 23,
+                "name": "Orange Essence Food Flavou",
+                "description": "Specifications of Orange Essence Food Flavour For Cakes and Baking Food Item",
+                "price": 14,
+                "INRprice": 14*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 8.04,
+                "rating": 4.85,
+                "stock": 26,
+                "brand": "Baking Food Items",
+                "category": "groceries",
+                "image": "https://i.dummyjson.com/data/products/23/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/23/1.jpg",
+                    "https://i.dummyjson.com/data/products/23/2.jpg",
+                    "https://i.dummyjson.com/data/products/23/3.jpg",
+                    "https://i.dummyjson.com/data/products/23/4.jpg",
+                    "https://i.dummyjson.com/data/products/23/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 24,
+                "name": "cereals muesli fruit nuts",
+                "description": "original fauji cereal muesli 250gm box pack original fauji cereals muesli fruit nuts flakes breakfast cereal break fast faujicereals cerels cerel foji fouji",
+                "price": 46,
+                "INRprice": 46*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 16.8,
+                "rating": 4.94,
+                "stock": 113,
+                "brand": "fauji",
+                "category": "groceries",
+                "image": "https://i.dummyjson.com/data/products/24/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/24/1.jpg",
+                    "https://i.dummyjson.com/data/products/24/2.jpg",
+                    "https://i.dummyjson.com/data/products/24/3.jpg",
+                    "https://i.dummyjson.com/data/products/24/4.jpg",
+                    "https://i.dummyjson.com/data/products/24/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 25,
+                "name": "Gulab Powder 50 Gram",
+                "description": "Dry Rose Flower Powder Gulab Powder 50 Gram • Treats Wounds",
+                "price": 70,
+                "INRprice": 70*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 13.58,
+                "rating": 4.87,
+                "stock": 47,
+                "brand": "Dry Rose",
+                "category": "groceries",
+                "image": "https://i.dummyjson.com/data/products/25/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/25/1.png",
+                    "https://i.dummyjson.com/data/products/25/2.jpg",
+                    "https://i.dummyjson.com/data/products/25/3.png",
+                    "https://i.dummyjson.com/data/products/25/4.jpg",
+                    "https://i.dummyjson.com/data/products/25/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 26,
+                "name": "Plant Hanger For Home",
+                "description": "Boho Decor Plant Hanger For Home Wall Decoration Macrame Wall Hanging Shelf",
+                "price": 41,
+                "INRprice": 41*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 17.86,
+                "rating": 4.08,
+                "stock": 131,
+                "brand": "Boho Decor",
+                "category": "home-decoration",
+                "image": "https://i.dummyjson.com/data/products/26/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/26/1.jpg",
+                    "https://i.dummyjson.com/data/products/26/2.jpg",
+                    "https://i.dummyjson.com/data/products/26/3.jpg",
+                    "https://i.dummyjson.com/data/products/26/4.jpg",
+                    "https://i.dummyjson.com/data/products/26/5.jpg",
+                    "https://i.dummyjson.com/data/products/26/thumbnail.jpg"
+                ]
+            },
+            {
+                "id": 27,
+                "name": "Flying Wooden Bird",
+                "description": "Package Include 6 Birds with Adhesive Tape Shape: 3D Shaped Wooden Birds Material: Wooden MDF, Laminated 3.5mm",
+                "price": 51,
+                "INRprice": 51*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 15.58,
+                "rating": 4.41,
+                "stock": 17,
+                "brand": "Flying Wooden",
+                "category": "home-decoration",
+                "image": "https://i.dummyjson.com/data/products/27/thumbnail.webp",
+                "images": [
+                    "https://i.dummyjson.com/data/products/27/1.jpg",
+                    "https://i.dummyjson.com/data/products/27/2.jpg",
+                    "https://i.dummyjson.com/data/products/27/3.jpg",
+                    "https://i.dummyjson.com/data/products/27/4.jpg",
+                    "https://i.dummyjson.com/data/products/27/thumbnail.webp"
+                ]
+            },
+            {
+                "id": 28,
+                "name": "3D Embellishment Art Lamp",
+                "description": "3D led lamp sticker Wall sticker 3d wall art light on/off button cell operated (included)",
+                "price": 20,
+                "INRprice": 20*70,
+                "quantityOnHand" : 100,
+                "maxPerCust" : 10,
+                "costOfShipping" : 10,
+                "reviews" : [],
+                "discountPercentage": 16.49,
+                "rating": 4.82,
+                "stock": 54,
+                "brand": "LED Lights",
+                "category": "home-decoration",
+                "image": "https://i.dummyjson.com/data/products/28/thumbnail.jpg",
+                "images": [
+                    "https://i.dummyjson.com/data/products/28/1.jpg",
+                    "https://i.dummyjson.com/data/products/28/2.jpg",
+                    "https://i.dummyjson.com/data/products/28/3.png",
+                    "https://i.dummyjson.com/data/products/28/4.jpg",
+                    "https://i.dummyjson.com/data/products/28/thumbnail.jpg"
+                ]
+            }
+        ]
+
+        
+
+        var productTable = document.getElementById('productList');
+
+        var productHtml = '';
+
+        productArray.map(function(i,v){
+
+            productHtml += `
+                <tr>
+                    <td>PID`+i.id+`</td>
+                    <td>`+i.name+`</td>
+                    <td>`+i.price+ `</td>
+                    <td>`+i.quantityOnHand+`</td>
+                    <td>`+i.category+`</td>
+                    <td>
+                        <img class="img img-thumbnail" src="`+i.image+`">
+                    </td>
+                    <td>
+                        <button onclick="viewProductDetail(`+v+`)" data-id="`+v+`" class="btn btn-sm">VIEW DETAIL</button>
+                        <button onclick="addToCart(`+v+`)" data-id="`+v+`" class="btn btn-sm">ADD TO CART</button>
+                    </td>
+                </tr>
+            `;
+        })
+
+        //making a function that will remove item from the cart
+        function removeCartItem(id){
+
+            if (cartArray[id]) {
+                delete cartArray[id];
+            }
+            setCart();
+        }
+
+        //this function is for adding an item to the cart
+        function addToCart(id){
+
+            var data = productArray[id];
+
+            if (cartArray[id]) {
+                cartArray[id].quantity = cartArray[id].quantity + 1;
+            } else {
+                cartArray[id] = {
+                    id: data.id,
+                    price: data.price,
+                    quantity: 1,
+                    shipping: data.costOfShipping,
+                };
+            }
+            setCart();
+        }
+
+        // for updating a cart
+        function setCart() {
+            var cart = `
+                <table class="table table-stripped">
+                    <tr>
+                        <th>ID</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                `;
+                
+                // making couple of variables to use them in a total calculation
+                var subtotal = 0;
+                var shipping = 0;
+                var finalsubtotal = 0;
+                var ordertotal = 0;
+                var tax = 0.13;
+                var taxtotal = 0;
+
+            cartArray.map(function(i,v){
+
+                subtotal = subtotal + (i.price *  i.quantity);
+                shipping = shipping + i.shipping;
+                taxtotal = (i.price * i.quantity * tax);
+                
+
+                cart += `<tr>
+                        <td>PID`+i.id+`</td>
+                        <td>$`+i.price+`</td>
+                        <td>`+i.quantity+`</td>
+                        <td>$`+(i.price * i.quantity)+`</td>
+                        <td><span onclick="removeCartItem(`+v+`)" style="font-size: 14px; padding: 4px; background: #f2f2f2">Remove item</span></td>
+                    </tr>`;
+            })
+
+            //this variable will get whole total of the cart
+            ordertotal = (subtotal + shipping + taxtotal);
+
+            cart += `
+                </table>
+                <hr />
+                <p class="m-0">Items Subtotal: $`+subtotal+`</p>
+                <p class="m-0">Estimated Shipping: $`+shipping+`</p><br>
+                <p class="m-0">Total tax: $`+taxtotal+`</p>
+                <p class="m-0">Order Total: $`+ordertotal+`</p>
+            `;
+
+            document.getElementById('cart-detail').style.display = 'block';
+            document.getElementById('cart-detail').innerHTML = '<div class="card-header" style="background: #ffff; border: 0">Your Cart <button class="btn btn-default" onclick="closeCartModal()" style="float:right">Close</button></div><div class="card-body">'+cart+'</div>';
+        }
+
+        //this function is for view details page
+        function viewProductDetail(productId){
+            
+            var data = productArray[productId];
+
+            var pdetail = `<h5>`+data.name+`</h5>
+                <table class="table table-stripped">
+                    <tr>
+                        <th>id</th>
+                        <td>PID`+data.id+`</td>
+                    </tr>
+                    <tr>
+                        <th>Product Name</th>
+                        <td>`+data.name+`</td>
+                    </tr>
+                    <tr>
+                        <th>Brand</th>
+                        <td>`+data.brand+`</td>
+                    </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td>`+data.category+`</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>`+data.description+`</td>
+                    </tr>
+                    <tr>
+                        <th>Price</th>
+                        <td>`+data.price+`</td>
+                    </tr>
+                    <tr>
+                        <th>Quantity On Hand</th>
+                        <td>`+data.quantityOnHand+`</td>
+                    </tr>
+                    <tr>
+                        <th>Max. Per Customer</th>
+                        <td>`+data.maxPerCust+`</td>
+                    </tr>
+                    <tr>
+                        <th>Cost Of Shipping</th>
+                        <td>`+data.costOfShipping+`</td>
+                    </tr>
+
+                    <tr>
+                        <th>Discount Percentage</th>
+                        <td>`+data.discountPercentage+`</td>
+                    </tr>
+                    <tr>
+                        <th>Rating</th>
+                        <td>`+data.rating+`</td>
+                    </tr>
+                    <tr>
+                        <th>Stock</th>
+                        <td>`+data.stock+`</td>
+                    </tr>
+                </table>`;
+
+            document.getElementById('p-detail').style.display = 'block';
+            document.getElementById('p-detail').innerHTML = '<button class="btn mt-2 mr-2" onclick="closeModal()" style="float:right">Close</button><div class="card-body">'+pdetail+'</div>';
+        }
+
+        function closeModal(){
+            document.getElementById('p-detail').style.display = 'none';
+        }
+        function closeCartModal(){
+            document.getElementById('cart-detail').style.display = 'none';
+        }
+
+        productTable.innerHTML = productHtml;
+
+</script>
+
+</html>
